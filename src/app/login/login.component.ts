@@ -33,7 +33,8 @@ export class LoginComponent implements OnInit {
     if(this.authService.login(this.loginForm.get("username").value, this.loginForm.get("password").value)){
       this.router.navigate(['/admin'])
     }else{
-
+      // Get Errors
+      this.message = this.messenger.dequeue();
     }
   }
 
