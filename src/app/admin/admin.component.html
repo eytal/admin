@@ -1,0 +1,16 @@
+<div class="row h-100">
+    <div class="my-auto mx-auto text-center min-w">
+
+        <button class="btn btn-success btn-block btn-lg" type="button" (click)="start()"> Start Game </button>
+        <button class="btn btn-primary btn-block btn-lg" type="button" (click)="next()"> Next Question </button>
+        <button class="btn btn-warning btn-block btn-lg" type="button" (click)="end()"> End Game </button>
+        <button class="btn btn-secondary btn-block btn-lg" type="button" (click)="unlock()"> Unlock User </button>
+        <button class="btn btn-danger btn-block btn-lg" type="button" (click)="reset()"> Reset Game </button>
+
+    </div>
+    <div class="my-auto mx-auto text-center min-w fixed-bottom">
+        <p class="h6">
+            {{message}}
+        </p>
+    </div>
+</div>

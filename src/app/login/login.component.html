@@ -1,0 +1,17 @@
+<div class="row h-100">
+    <div class="my-auto mx-auto text-center">
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+            <div class="form-group">
+                <input class="w-100 min-w" placeholder="Username" name="userName" formControlName="username" type="text">
+            </div>
+            <div class="form-group">
+                <input class="w-100 min-w" placeholder="Password" name="password" formControlName="password" type="text">
+            </div>
+            <button class="btn btn-primary btn-block" type="submit" [disabled]="!loginForm.valid"> Login </button>
+
+            <p class="h6">
+                {{message}}
+            </p>
+        </form>
+    </div>
+</div>
