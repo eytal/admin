@@ -109,10 +109,10 @@ export class AdminComponent implements OnInit {
         resp => {
           this.message = resp["Success"];
           //window.location.reload();
+          this.questionStatus = 'Game has resetted';
         },
         error => {
           console.log(error);
-          window.location.reload();
         }
       );
     }
