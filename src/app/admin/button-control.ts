@@ -10,10 +10,10 @@ export class ButtonControl {
 
     constructor(){
         this.canOpen = true;
-        this.canStart = false;
-        this.canNext = false;
+        this.canStart = true;
+        this.canNext = true;
         this.canEnd = true;
-        this.canReset = false;
+        this.canReset = true;
         this.canUnlock = false;
     }
 

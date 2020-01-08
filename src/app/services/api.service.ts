@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {
-  mergeMap, switchMap, retry,
-  map, catchError, filter, scan
-} from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +38,7 @@ export class ApiService {
               'Authorization': "Bearer " + resp['token']
             })
           };
-          
+
           console.log('changed authorization headers', resp);
           //console.log(this.httpOptions);
           return resp;
@@ -61,6 +58,17 @@ export class ApiService {
         }
       ),
     );
+  }
+  
+  restoreSession(){
+    if(localStorage.getItem('token')){
+      this.httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer " + localStorage.getItem('token')
+        })
+      };
+    }
   }
 
 

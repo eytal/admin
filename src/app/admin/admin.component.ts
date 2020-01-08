@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/api.service';
-import { AuthService } from '../services/auth.service';
 import { MessageService } from '../services/message.service';
 import { WebSocketService } from '../services/web-socket.service';
 import { ButtonControl } from './button-control'
@@ -18,13 +17,16 @@ export class AdminComponent implements OnInit {
   public questionState: string;
   public questionStatus: string;
  
-  constructor(private api: ApiService, private messenger: MessageService) {}
+  constructor(private api: ApiService, private messenger: MessageService, private ws: WebSocketService) {
+    this.api.restoreSession();
+  }
 
   ngOnInit() {
     this.message = this.messenger.dequeue();
     this.questionNo = 0;
     this.questionStatus = "Game room is not open";
     this.ctl = new ButtonControl();
+    this.ws.connect();
   }
 
   open() {
@@ -85,6 +87,7 @@ export class AdminComponent implements OnInit {
       this.api.get('end').subscribe(
         resp => {
           this.message = resp["Success"];
+          this.questionStatus = "The game has ended";
         },
         error => {
           console.log(error);
@@ -102,9 +105,11 @@ export class AdminComponent implements OnInit {
       this.api.get('reset').subscribe(
         resp => {
           this.message = resp["Success"];
+          //window.location.reload();
         },
         error => {
           console.log(error);
+          window.location.reload();
         }
       );
     }
@@ -117,8 +122,9 @@ export class AdminComponent implements OnInit {
     this.api.getGameState().subscribe(
       resp =>{
         console.log(resp);
-        this.questionNo = resp["questionNo"];
+        this.questionNo = resp["question"];
         this.questionState = resp["questionState"];
+        this.setQuestionStatus(this.questionState);
         if (resp["questionState"] != "END"){
           this.ctl.set('next', false);
         }else{
@@ -129,8 +135,16 @@ export class AdminComponent implements OnInit {
 
   }
 
-  setQuestionStatus(){
+  setQuestionStatus(qnstate:string){
+    if(qnstate == "START"){
+      this.questionStatus = "Question has started";
+    }else if(qnstate == "END"){
+      this.questionStatus = "Question has ended";
+    }
+  }
 
+  ngOnDestroy(): void {
+    this.ws.disconnect();
   }
 
 }

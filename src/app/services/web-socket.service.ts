@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import {SockJS} from "sockjs-client";
-import {Client} from "stompjs";
+import * as SockJS from "sockjs-client";
+import * as Stomp from "stompjs";
 
 @Injectable({
   providedIn: 'root'
@@ -12,35 +12,39 @@ export class WebSocketService {
 
   WSOCK_API:string = environment.api_endpoint +"/game";
 
-  constructor() { 
-    const stompConfig = {
-      // Typically login, passcode and vhost
-      // Adjust these for your broker
-      connectHeaders: {},
+  constructor() {}
 
-      // Broker URL, should start with ws:// or wss:// - adjust for your broker setup
-      // brokerURL: "ws://cny-game.herokuapp.com/game",
-      // Keep it off for production, it can be quite verbose
-      // Skip this key to disable
-      debug: function (str: string) {
-        console.log('STOMP: ' + str);
-      },
-      // If disconnected, it will retry after 1s
-      reconnectDelay: 5000,
-    };
+  connect() {
+    console.log("Initialize WebSocket Connection");
+    let ws = new SockJS(this.WSOCK_API);
+    this.stompClient = Stomp.over(ws);
+    const _this = this;
 
-    this.stompClient = new Client(stompConfig);
-    this.stompClient.webSocketFactory = () => new SockJS(this.WSOCK_API);
-    this.stompClient.onConnect = (frame: any) => {
-      // The return object has a method called `unsubscribe`
-      let subscription = this.stompClient.subscribe('/topic/game', function (message: any) {
-        let payload = JSON.parse(message.body);
-        console.log(payload);
+    this.stompClient.connect({}, function (frame:any) {
+      this.stompClient.subscribe('/topic/game', function(sdkEvent: any) {
+        this.onMessageReceived(sdkEvent);
       });
+      //_this.stompClient.reconnect_delay = 2000;
+    }, this.errorCallBack);
+  };
+
+  disconnect() {
+    if (this.stompClient !== null) {
+      this.stompClient.disconnect();
     }
+    console.log("Disconnected");
+  }
 
-    this.stompClient.activate();
+  // on error, schedule a reconnection attempt
+  errorCallBack(error: any) {
+    console.log("errorCallBack -> " + error)
+    setTimeout(() => {
+      this.connect();
+    }, 5000);
+  }
 
+  onMessageReceived(message) {
+    console.log("Message Recieved from Server :: " + message);
   }
 
 }
