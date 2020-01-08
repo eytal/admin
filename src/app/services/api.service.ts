@@ -23,7 +23,7 @@ export class ApiService {
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': "Bearer <insert_jwt_token>"
+      'Authorization': "Bearer <insert jwt token>"
     }),
   }
 
@@ -41,7 +41,9 @@ export class ApiService {
               'Authorization': "Bearer " + resp['token']
             })
           };
-          console.log('resp', resp);
+          
+          console.log('changed authorization headers', resp);
+          //console.log(this.httpOptions);
           return resp;
         }
         ),
@@ -49,34 +51,8 @@ export class ApiService {
   }
 
   // Game API
-  open() {
-    return this.http.get<Observable<HttpResponse<any>>>(this.GAME_API_URL + '/open', this.httpOptions).pipe(
-      map(
-        resp => {
-          //localStorage.setItem('currentUser', username);
-          console.log('resp', resp);
-          return resp;
-        }
-      ),
-    );
-
-  }
-
-  start(){
-    return this.http.get<Observable<HttpResponse<any>>>(this.GAME_API_URL + '/start', this.httpOptions).pipe(
-      map(
-        resp => {
-          //localStorage.setItem('currentUser', username);
-          console.log('resp', resp);
-          return resp;
-        }
-      ),
-    );
-    
-  }
-
-  next() {
-    return this.http.get<Observable<HttpResponse<any>>>(this.GAME_API_URL + '/next', this.httpOptions).pipe(
+  get(path: string){
+    return this.http.get<Observable<HttpResponse<any>>>(this.GAME_API_URL + '/'+path, this.httpOptions).pipe(
       map(
         resp => {
           //localStorage.setItem('currentUser', username);
@@ -87,32 +63,10 @@ export class ApiService {
     );
   }
 
-  end() {
-    return this.http.get<Observable<HttpResponse<any>>>(this.GAME_API_URL + '/end', this.httpOptions).pipe(
-      map(
-        resp => {
-          //localStorage.setItem('currentUser', username);
-          console.log('resp', resp);
-          return resp;
-        }
-      ),
-    );
-    
-  }
-
-  reset() {
-    return this.http.get<Observable<HttpResponse<any>>>(this.GAME_API_URL + '/reset', this.httpOptions).pipe(
-      map(
-        resp => {
-          //localStorage.setItem('currentUser', username);
-          console.log('resp', resp);
-          return resp;
-        }
-      ),
-    );
-  }
 
   getGameState(){
+    this.debug();
+
     return this.http.get<Observable<HttpResponse<any>>>(this.GAME_API_URL + '/state', this.httpOptions).pipe(
       map(
         resp => {
@@ -125,6 +79,10 @@ export class ApiService {
   }
 
   unlock() {
+  }
+  debug(){
+    console.log(localStorage.getItem('token'));
+    console.log(this.httpOptions.headers)
   }
 
 }

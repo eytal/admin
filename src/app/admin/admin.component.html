@@ -1,14 +1,13 @@
 <div class="row h-100">
-    <div class="my-auto mx-auto text-center min-w fixed-top">
-        <p class="h3">
-            {{questionNo}}
+
+    <div class="my-auto mx-auto text-center min-w">
+        <p class="h2">
+            Question {{questionNo}}
         </p>
         <p>
-            {{questionState}}
+            {{questionStatus}}
         </p>
-    </div>
-    <div class="my-auto mx-auto text-center min-w">
-
+        <button class="btn btn-info btn-block btn-lg" type="button" (click)="open()" [hidden]="!ctl.canOpen"> Open Game </button>
         <button class="btn btn-success btn-block btn-lg" type="button" (click)="start()" [disabled]="!ctl.canStart"> Start Game </button>
         <button class="btn btn-primary btn-block btn-lg" type="button" (click)="next()" [disabled]="!ctl.canNext"> Next Question </button>
         <button class="btn btn-warning btn-block btn-lg" type="button" (click)="end()" [disabled]="!ctl.canEnd"> End Game </button>

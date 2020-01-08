@@ -16,13 +16,14 @@ export class AdminComponent implements OnInit {
   public ctl: ButtonControl;
   public questionNo: number;
   public questionState: string;
+  public questionStatus: string;
  
-  constructor(private api: ApiService, private messenger: MessageService, private ws: WebSocketService) {}
+  constructor(private api: ApiService, private messenger: MessageService) {}
 
   ngOnInit() {
     this.message = this.messenger.dequeue();
-    
-    this.getGameState();
+    this.questionNo = 0;
+    this.questionStatus = "Game room is not open";
     this.ctl = new ButtonControl();
   }
 
@@ -31,9 +32,10 @@ export class AdminComponent implements OnInit {
       return;
     }
     this.ctl.toggle('open');
-    this.api.start().subscribe(
+    this.api.get('open').subscribe(
       resp => {
         this.message = resp["Success"];
+        this.questionStatus = "Game has not started";
         this.getGameState();
       },
       error => {
@@ -48,7 +50,7 @@ export class AdminComponent implements OnInit {
       return;
     }
     this.ctl.toggle('start');
-    this.api.start().subscribe(
+    this.api.get('start').subscribe(
       resp =>{
         this.message = resp["Success"];
         this.getGameState();
@@ -64,7 +66,7 @@ export class AdminComponent implements OnInit {
     if(!this.ctl.canNext){
       return;
     }
-    this.api.next().subscribe(
+    this.api.get('next').subscribe(
       resp => {
         this.message = resp["Success"];
         this.getGameState();
@@ -80,7 +82,7 @@ export class AdminComponent implements OnInit {
       return;
     }
     if(confirm("Are you sure you want to END the game?")){
-      this.api.end().subscribe(
+      this.api.get('end').subscribe(
         resp => {
           this.message = resp["Success"];
         },
@@ -97,7 +99,7 @@ export class AdminComponent implements OnInit {
     }
 
     if (confirm("Are you sure you want to RESET the game?")) {
-      this.api.reset().subscribe(
+      this.api.get('reset').subscribe(
         resp => {
           this.message = resp["Success"];
         },
@@ -124,6 +126,10 @@ export class AdminComponent implements OnInit {
         }
       }
     );
+
+  }
+
+  setQuestionStatus(){
 
   }
 
