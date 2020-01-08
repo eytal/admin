@@ -39,7 +39,7 @@ export class ApiService {
             })
           };
 
-          console.log('changed authorization headers', resp);
+         // console.log('changed authorization headers', resp);
           //console.log(this.httpOptions);
           return resp;
         }
@@ -73,7 +73,7 @@ export class ApiService {
 
 
   getGameState(){
-    this.debug();
+    //this.debug();
 
     return this.http.get<Observable<HttpResponse<any>>>(this.GAME_API_URL + '/state', this.httpOptions).pipe(
       map(

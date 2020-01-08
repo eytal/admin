@@ -10,10 +10,10 @@ export class ButtonControl {
 
     constructor(){
         this.canOpen = true;
-        this.canStart = true;
-        this.canNext = true;
-        this.canEnd = true;
-        this.canReset = true;
+        this.canStart = false;
+        this.canNext = false;
+        this.canEnd = false;
+        this.canReset = false;
         this.canUnlock = false;
     }
 
@@ -65,6 +65,15 @@ export class ButtonControl {
             default:
                 console.log('invalid set');
         }
+    }
+
+    reset(){
+        this.canOpen = true;
+        this.canStart = false;
+        this.canNext = false;
+        this.canEnd = false;
+        this.canReset = false;
+        this.canUnlock = false;
     }
 
 }

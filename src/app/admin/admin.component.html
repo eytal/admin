@@ -8,10 +8,10 @@
             {{questionStatus}}
         </p>
         <button class="btn btn-info btn-block btn-lg" type="button" (click)="open()" [hidden]="!ctl.canOpen"> Open Game </button>
-        <button class="btn btn-success btn-block btn-lg" type="button" (click)="start()" [disabled]="!ctl.canStart"> Start Game </button>
+        <button class="btn btn-success btn-block btn-lg" type="button" (click)="start()" [hidden]="!ctl.canStart"> Start Game </button>
         <button class="btn btn-primary btn-block btn-lg" type="button" (click)="next()" [disabled]="!ctl.canNext"> Next Question </button>
-        <button class="btn btn-warning btn-block btn-lg" type="button" (click)="end()" [disabled]="!ctl.canEnd"> End Game </button>
-        <button class="btn btn-danger btn-block btn-lg" type="button" (click)="reset()" [hidden]="!ctl.canReset"> Reset Game</button>
+        <button class="btn btn-danger btn-block btn-lg" type="button" (click)="end()" [disabled]="!ctl.canEnd"> End Game </button>
+        <button class="btn btn-warning btn-block btn-lg" type="button" (click)="reset()" [hidden]="!ctl.canReset"> Reset Game</button>
         <button class="btn btn-secondary btn-block btn-lg" type="button" (click)="unlock()" [hidden]="!ctl.canUnlock"> Unlock User </button>
 
     </div>

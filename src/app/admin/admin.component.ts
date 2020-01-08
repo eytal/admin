@@ -20,13 +20,14 @@ export class AdminComponent implements OnInit {
   constructor(private api: ApiService, private messenger: MessageService, private ws: WebSocketService) {
     this.api.restoreSession();
     this.questionStatus = "Game room is not open";
-    this.getGameState();
+    this.restoreGameState();
   }
 
   ngOnInit() {
     this.message = this.messenger.dequeue();
     this.questionNo = 0;
     this.ctl = new ButtonControl();
+    this.ws.componentHandler(this.handleWSMessages.bind(this));
     this.ws.connect();
   }
 
@@ -39,7 +40,8 @@ export class AdminComponent implements OnInit {
       resp => {
         this.message = resp["Success"];
         this.questionStatus = "Game has not started";
-        this.getGameState();
+        this.ctl.set('start', true);
+        this.ctl.set('open', false);
       },
       error => {
         console.log(error);
@@ -56,7 +58,7 @@ export class AdminComponent implements OnInit {
     this.api.get('start').subscribe(
       resp =>{
         this.message = resp["Success"];
-        this.getGameState();
+        this.ctl.set('open', false);
       },
       error => {
         console.log(error);
@@ -71,8 +73,7 @@ export class AdminComponent implements OnInit {
     }
     this.api.get('next').subscribe(
       resp => {
-        this.message = resp["Success"];
-        this.getGameState();
+        this.message = '';
       },
       error => {
         console.log(error);
@@ -89,6 +90,7 @@ export class AdminComponent implements OnInit {
         resp => {
           this.message = resp["Success"];
           this.questionStatus = "The game has ended";
+          this.ctl.set('reset', true);
         },
         error => {
           console.log(error);
@@ -119,18 +121,13 @@ export class AdminComponent implements OnInit {
   unlock(){
   }
 
-  getGameState(){
+  restoreGameState(){
     this.api.getGameState().subscribe(
       resp =>{
         console.log(resp);
         this.questionNo = resp["question"];
         this.questionState = resp["questionState"];
-        this.setQuestionStatus(this.questionState);
-        if (resp["questionState"] != "END"){
-          this.ctl.set('next', false);
-        }else{
-          this.ctl.set('next', true);
-        }
+        this.handleWSMessages(resp);
       }
     );
 
@@ -146,6 +143,35 @@ export class AdminComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.ws.disconnect();
+  }
+
+  handleWSMessages(msg: any){
+    //console.log("admin",msg);
+    this.questionState = msg['questionState'];
+    this.setQuestionStatus(this.questionState);
+    this.questionNo = msg['question'];
+
+    if(msg["question"] == 0){
+      this.ctl.reset();
+      this.questionStatus = "Game room is not open";
+      this.ctl.set('end', false);
+    }else if(msg["questionState"]=="END"){
+      this.ctl.set('next', true);
+    } else if (msg["questionState"] == "START"){
+      this.ctl.set('next', false);
+    }
+
+    if(msg["question"] > 0){
+      if (!this.ctl.canEnd) {
+        this.ctl.toggle('end');
+      }
+      if(this.ctl.canStart){
+        this.ctl.toggle('start');
+      }
+      if(this.ctl.canOpen){
+        this.ctl.toggle('open');
+      }
+    }
   }
 
 }
