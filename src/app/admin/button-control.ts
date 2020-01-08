@@ -1,6 +1,7 @@
 
 export class ButtonControl {
 
+    public canOpen: boolean;
     public canStart: boolean;
     public canNext: boolean;
     public canEnd: boolean;
@@ -9,14 +10,17 @@ export class ButtonControl {
 
     constructor(){
         this.canStart = true;
-        this.canNext = false;
-        this.canEnd = false;
+        this.canNext = true;
+        this.canEnd = true;
         this.canReset = false;
         this.canUnlock = false;
     }
 
     toggle(param: string){
         switch(param) {
+            case 'open':
+                this.canOpen = !this.canOpen;
+                break;
             case 'start':
                 this.canStart = !this.canStart;
                 break;
@@ -37,8 +41,11 @@ export class ButtonControl {
         }
     }
 
-    set(param: string, value: true){
+    set(param: string, value: boolean){
         switch (param) {
+            case 'open':
+                this.canOpen = value;
+                break;
             case 'start':
                 this.canStart = value;
                 break;

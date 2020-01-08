@@ -49,8 +49,21 @@ export class ApiService {
   }
 
   // Game API
+  open() {
+    return this.http.get<Observable<HttpResponse<any>>>(this.GAME_API_URL + '/open', this.httpOptions).pipe(
+      map(
+        resp => {
+          //localStorage.setItem('currentUser', username);
+          console.log('resp', resp);
+          return resp;
+        }
+      ),
+    );
+
+  }
+
   start(){
-    return this.http.get<Observable<HttpResponse<any>>>(this.API_ENDPOINT + '/start', this.httpOptions).pipe(
+    return this.http.get<Observable<HttpResponse<any>>>(this.GAME_API_URL + '/start', this.httpOptions).pipe(
       map(
         resp => {
           //localStorage.setItem('currentUser', username);
@@ -63,7 +76,7 @@ export class ApiService {
   }
 
   next() {
-    return this.http.get<Observable<HttpResponse<any>>>(this.API_ENDPOINT + '/start', this.httpOptions).pipe(
+    return this.http.get<Observable<HttpResponse<any>>>(this.GAME_API_URL + '/next', this.httpOptions).pipe(
       map(
         resp => {
           //localStorage.setItem('currentUser', username);
@@ -75,7 +88,7 @@ export class ApiService {
   }
 
   end() {
-    return this.http.get<Observable<HttpResponse<any>>>(this.API_ENDPOINT + '/start', this.httpOptions).pipe(
+    return this.http.get<Observable<HttpResponse<any>>>(this.GAME_API_URL + '/end', this.httpOptions).pipe(
       map(
         resp => {
           //localStorage.setItem('currentUser', username);
@@ -88,7 +101,7 @@ export class ApiService {
   }
 
   reset() {
-    return this.http.get<Observable<HttpResponse<any>>>(this.API_ENDPOINT + '/start', this.httpOptions).pipe(
+    return this.http.get<Observable<HttpResponse<any>>>(this.GAME_API_URL + '/reset', this.httpOptions).pipe(
       map(
         resp => {
           //localStorage.setItem('currentUser', username);
@@ -100,7 +113,7 @@ export class ApiService {
   }
 
   getGameState(){
-    return this.http.get<Observable<HttpResponse<any>>>(this.API_ENDPOINT + '/state', this.httpOptions).pipe(
+    return this.http.get<Observable<HttpResponse<any>>>(this.GAME_API_URL + '/state', this.httpOptions).pipe(
       map(
         resp => {
           //localStorage.setItem('currentUser', username);
