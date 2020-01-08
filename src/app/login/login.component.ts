@@ -30,12 +30,20 @@ export class LoginComponent implements OnInit {
   }
 
   login(){
-    if(this.authService.login(this.loginForm.get("username").value, this.loginForm.get("password").value)){
-      this.router.navigate(['/admin'])
-    }else{
-      // Get Errors
-      this.message = this.messenger.dequeue();
+
+    if(this.loginForm.invalid){
+      return;
     }
+
+    this.authService.login(this.loginForm.get("username").value, this.loginForm.get("password").value).subscribe(
+      resp => {
+        this.router.navigate(['/admin']);
+      },
+      error => {
+        console.log("An error occured:", error)
+        this.message = "Incorrect UsernamePassword";
+      }
+    )
   }
 
 }

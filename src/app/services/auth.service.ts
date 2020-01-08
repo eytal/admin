@@ -3,6 +3,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { ApiService } from './api.service';
 import { MessageService } from './message.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,22 +12,21 @@ export class AuthService {
   API_ENDPOINT: string = environment.api_endpoint;
   constructor(private api: ApiService, private messenger: MessageService) { }
 
-  login(username: string, password: string): boolean{
-    if(this.api.login(username, password)){
-      return true
-    }else{
-      this.messenger.queue("Incorrect UsernamePassword");
-      return false;
-    }
+  login(username: string, password: string): Observable<any>{
+    return this.api.login(username, password);
   }
 
   // Verify JWT
   isLoggedIn(): boolean{
-    return true;
+    if(localStorage.getItem('token')){
+      return true;
+    }else{
+      return false;
+    }
   }
 
-  test() {
-    
+  logout() {
+    localStorage.removeItem('token');
   }
 
 }
