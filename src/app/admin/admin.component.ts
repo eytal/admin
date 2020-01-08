@@ -19,12 +19,13 @@ export class AdminComponent implements OnInit {
  
   constructor(private api: ApiService, private messenger: MessageService, private ws: WebSocketService) {
     this.api.restoreSession();
+    this.questionStatus = "Game room is not open";
+    this.getGameState();
   }
 
   ngOnInit() {
     this.message = this.messenger.dequeue();
     this.questionNo = 0;
-    this.questionStatus = "Game room is not open";
     this.ctl = new ButtonControl();
     this.ws.connect();
   }
