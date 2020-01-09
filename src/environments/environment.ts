@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api_endpoint: "http://cnybackend.southeastasia.cloudapp.azure.com:8080"
+  api_endpoint: "https://cnybackend.southeastasia.cloudapp.azure.com"
 };
 
 /*

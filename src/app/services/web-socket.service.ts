@@ -13,6 +13,8 @@ export class WebSocketService {
   private adminFn: (msg: any) => void;
 
   WSOCK_API:string = environment.api_endpoint +"/game";
+  //WSOCK_API: string = 'http://cnybackend.southeastasia.cloudapp.azure.com:8080' +"/game";
+
 
   constructor() {}
 
