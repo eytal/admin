@@ -5,9 +5,14 @@
         </p>
     </div>
     <div class="my-auto mx-auto text-center min-w">
-        <p class="h1">
-            {{questionNo? questionNo:''}}
-        </p>
+        <div *ngIf="questionNo">
+            <p class="h2">
+                Question
+            </p>
+            <p class="h1">
+                {{questionNo}}
+            </p>
+        </div>
         <p>
             {{questionStatus}}
         </p>
