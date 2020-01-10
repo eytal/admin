@@ -42,7 +42,6 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.api.get('open').subscribe(
       resp => {
         this.message = resp.Success;
-        this.questionStatus = 'Game has not started';
         this.ctl.canStart = true;
         this.ctl.canOpen = false;
       },
@@ -145,7 +144,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.questionStatus = 'Waiting to start';
 
     }else if(gs.progress == 'PLAYING') {
-      
+      this.ctl.canStart = false;
       this.ctl.canOpen = false;
       this.ctl.canShowNext = true;
       this.ctl.canEnd = true;
