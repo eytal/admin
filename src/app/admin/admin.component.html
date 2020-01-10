@@ -16,7 +16,5 @@
         <button class="btn btn-primary btn-block btn-lg" type="button" (click)="next()" [disabled]="!ctl.canNext" [hidden]="!ctl.canShowNext"> Next Question </button>
         <button class="btn btn-danger btn-block btn-lg" type="button" (click)="end()" [disabled]="!ctl.canEnd" [hidden]="!ctl.canShowEnd"> End Game </button>
         <button class="btn btn-warning btn-block btn-lg" type="button" (click)="reset()" [hidden]="!ctl.canReset"> Reset Game</button>
-        <button class="btn btn-secondary btn-block btn-lg" type="button" (click)="unlock()" [hidden]="!ctl.canUnlock"> Unlock User </button>
-
     </div>
 </div>
