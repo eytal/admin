@@ -3,6 +3,8 @@ import { environment } from '../../environments/environment';
 import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ApiResponse } from './api-response';
+import { GameState } from '../admin/game-state';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +40,6 @@ export class ApiService {
               'Authorization': "Bearer " + resp['token']
             })
           };
-
          // console.log('changed authorization headers', resp);
           //console.log(this.httpOptions);
           return resp;
@@ -48,16 +49,8 @@ export class ApiService {
   }
 
   // Game API
-  get(path: string){
-    return this.http.get<Observable<HttpResponse<any>>>(this.GAME_API_URL + '/'+path, this.httpOptions).pipe(
-      map(
-        resp => {
-          //localStorage.setItem('currentUser', username);
-          console.log('resp', resp);
-          return resp;
-        }
-      ),
-    );
+  get(path: string): Observable<ApiResponse>{
+    return this.http.get<ApiResponse>(this.GAME_API_URL + '/'+path, this.httpOptions);
   }
   
   restoreSession(){
@@ -74,16 +67,7 @@ export class ApiService {
 
   getGameState(){
     //this.debug();
-
-    return this.http.get<Observable<HttpResponse<any>>>(this.GAME_API_URL + '/state', this.httpOptions).pipe(
-      map(
-        resp => {
-          //localStorage.setItem('currentUser', username);
-          console.log('resp', resp);
-          return resp;
-        }
-      ),
-    );
+    return this.http.get<GameState>(this.GAME_API_URL + '/state', this.httpOptions);
   }
 
   unlock() {

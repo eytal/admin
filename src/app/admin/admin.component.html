@@ -1,23 +1,22 @@
 <div class="row h-100">
-
+    <div class="my-auto mx-auto text-center min-w fixed-top">
+        <p class="h6">
+            {{message}}
+        </p>
+    </div>
     <div class="my-auto mx-auto text-center min-w">
-        <p class="h2">
-            {{questionNo}}
+        <p class="h1">
+            {{questionNo? questionNo:''}}
         </p>
         <p>
             {{questionStatus}}
         </p>
         <button class="btn btn-info btn-block btn-lg" type="button" (click)="open()" [hidden]="!ctl.canOpen"> Open Game </button>
         <button class="btn btn-success btn-block btn-lg" type="button" (click)="start()" [hidden]="!ctl.canStart"> Start Game </button>
-        <button class="btn btn-primary btn-block btn-lg" type="button" (click)="next()" [disabled]="!ctl.canNext"> Next Question </button>
-        <button class="btn btn-danger btn-block btn-lg" type="button" (click)="end()" [disabled]="!ctl.canEnd"> End Game </button>
+        <button class="btn btn-primary btn-block btn-lg" type="button" (click)="next()" [disabled]="!ctl.canNext" [hidden]="!ctl.canShowNext"> Next Question </button>
+        <button class="btn btn-danger btn-block btn-lg" type="button" (click)="end()" [disabled]="!ctl.canEnd" [hidden]="!ctl.canShowEnd"> End Game </button>
         <button class="btn btn-warning btn-block btn-lg" type="button" (click)="reset()" [hidden]="!ctl.canReset"> Reset Game</button>
         <button class="btn btn-secondary btn-block btn-lg" type="button" (click)="unlock()" [hidden]="!ctl.canUnlock"> Unlock User </button>
 
-    </div>
-    <div class="my-auto mx-auto text-center min-w fixed-bottom">
-        <p class="h6">
-            {{message}}
-        </p>
     </div>
 </div>

@@ -59,7 +59,6 @@ export class WebSocketService {
   
   onMessageReceived(message: any) {
     console.log("WS:",JSON.parse(message));
-
     this.adminFn(JSON.parse(message));
   }
 

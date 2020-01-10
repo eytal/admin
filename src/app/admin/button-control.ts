@@ -3,8 +3,10 @@ export class ButtonControl {
 
     public canOpen: boolean;
     public canStart: boolean;
+    public canShowNext: boolean;
     public canNext: boolean;
     public canEnd: boolean;
+    public canShowEnd: boolean;
     public canReset: boolean;
     public canUnlock: boolean;
 
@@ -12,7 +14,9 @@ export class ButtonControl {
         this.canOpen = true;
         this.canStart = false;
         this.canNext = false;
+        this.canShowNext = false;
         this.canEnd = false;
+        this.canShowEnd = false;
         this.canReset = false;
         this.canUnlock = false;
     }
@@ -42,36 +46,13 @@ export class ButtonControl {
         }
     }
 
-    set(param: string, value: boolean){
-        switch (param) {
-            case 'open':
-                this.canOpen = value;
-                break;
-            case 'start':
-                this.canStart = value;
-                break;
-            case 'next':
-                this.canNext = value;
-                break;
-            case 'end':
-                this.canEnd = value;
-                break;
-            case 'reset':
-                this.canReset = value;
-                break;
-            case 'unlock':
-                this.canUnlock = value;
-                break;
-            default:
-                console.log('invalid set');
-        }
-    }
-
     reset(){
         this.canOpen = true;
         this.canStart = false;
         this.canNext = false;
+        this.canShowNext = false;
         this.canEnd = false;
+        this.canShowEnd = false;
         this.canReset = false;
         this.canUnlock = false;
     }
