@@ -14,23 +14,23 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   public message: string;
   public ctl: ButtonControl;
+  public gameState: GameState;
   public questionNo: number;
   public questionState: string;
   public questionStatus: string;
-  public gameEnd = false;
- 
+
   constructor(private api: ApiService, private messenger: MessageService, private ws: WebSocketService) {
-    this.api.restoreSession();
-    this.questionStatus = 'Game room is not open';
-    this.restoreGameState();
-    this.gameEnd = false;
+    this.questionNo = 0;
+    this.message = '';
+    this.ctl = new ButtonControl();
+    this.ws.componentHandler(this.handleWSMessages.bind(this), this.restoreGameState.bind(this));
   }
 
   ngOnInit() {
     this.message = this.messenger.dequeue();
-    this.questionNo = 0;
-    this.ctl = new ButtonControl();
-    this.ws.componentHandler(this.handleWSMessages.bind(this));
+    this.api.restoreSession();
+    this.restoreGameState({});
+    this.ws.disconnectFlag = false;
     this.ws.connect();
   }
 
@@ -38,53 +38,52 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (!this.ctl.canOpen) {
       return;
     }
-    this.ctl.toggle('open');
+    this.ctl.canOpen = false;
     this.api.get('open').subscribe(
       resp => {
         this.message = resp.Success;
-        this.ctl.canStart = true;
-        this.ctl.canOpen = false;
       },
       error => {
         console.log(error);
-        this.ctl.toggle('open');
+        this.ctl.canOpen = true;
       }
     );
   }
 
-  start(){
+  start() {
     if (!this.ctl.canStart) {
       return;
     }
-    this.ctl.toggle('start');
+    this.ctl.canStart = false;
     this.api.get('start').subscribe(
-      resp =>{
+      resp => {
         this.message = resp.Success;
-        this.ctl.canOpen = false;
       },
       error => {
         console.log(error);
-        this.ctl.toggle('start');
+        this.ctl.canStart = true;
       }
     );
   }
 
-  next(){
-    if(!this.ctl.canNext){
+  next() {
+    if (!this.ctl.canNext) {
       return;
     }
+    this.ctl.canNext = false;
     this.api.get('next').subscribe(
       resp => {
         this.message = '';
       },
       error => {
         console.log(error);
+        this.ctl.canNext = true;
       }
     );
   }
 
-  end(){
-    if(!this.ctl.canEnd){
+  end() {
+    if (!this.ctl.canEnd) {
       return;
     }
     if (confirm('Are you sure you want to END the game?')) {
@@ -99,8 +98,8 @@ export class AdminComponent implements OnInit, OnDestroy {
     }
   }
 
-  reset(){
-    if(!this.ctl.canReset){
+  reset() {
+    if (!this.ctl.canReset) {
       return;
     }
 
@@ -118,11 +117,14 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
 
-  restoreGameState(): void {
+  restoreGameState(evt: any) {
     this.api.getGameState().subscribe(
-      resp =>{
+      resp => {
         console.log('Restore game state', resp);
         this.handleWSMessages(resp);
+      },
+      error => {
+        console.log('Restore error', error);
       }
     );
   }
@@ -132,32 +134,37 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   handleWSMessages(gs: GameState) {
+    this.gameState = gs;
     this.questionState = gs.questionState;
     this.questionNo = gs.question;
     if (gs.progress == 'EMPTY') {
       this.questionStatus = 'Game room is not open';
+      this.ctl.canOpen = true;
       this.ctl.reset();
 
-    }else if(gs.progress == 'WAITING') {
+    } else if (gs.progress == 'WAITING') {
       this.ctl.canOpen = false;
       this.ctl.canStart = true;
+      this.ctl.canShowNext = false;
+      this.ctl.canShowEnd = false;
+      this.ctl.canEnd = false;
       this.questionStatus = 'Waiting to start';
 
-    }else if(gs.progress == 'PLAYING') {
+    } else if (gs.progress == 'PLAYING') {
       this.ctl.canStart = false;
       this.ctl.canOpen = false;
       this.ctl.canShowNext = true;
       this.ctl.canEnd = true;
       this.ctl.canShowEnd = true;
 
-      if(gs.questionState == 'END') {
+      if (gs.questionState == 'END') {
         this.questionStatus = 'Question has ended';
         this.ctl.canNext = true;
-      }else if(gs.questionState == 'START') {
+      } else if (gs.questionState == 'START') {
         this.questionStatus = 'Question has started';
         this.ctl.canNext = false;
       }
-    }else if(gs.progress == 'END') {
+    } else if (gs.progress == 'END') {
       this.questionStatus = 'You have ended the game';
       this.ctl.canShowNext = false;
       this.ctl.canOpen = false;

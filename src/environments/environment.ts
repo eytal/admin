@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api_endpoint: "https://cnybackend.southeastasia.cloudapp.azure.com"
+  api_endpoint: 'https://cnybackend.southeastasia.cloudapp.azure.com'
 };
 
 /*

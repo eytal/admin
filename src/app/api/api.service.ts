@@ -11,7 +11,7 @@ import { GameState } from '../admin/game-state';
 })
 export class ApiService {
   API_ENDPOINT: string = environment.api_endpoint;
-  GAME_API_URL: string = this.API_ENDPOINT + "/api/game";
+  GAME_API_URL: string = this.API_ENDPOINT + '/api/game';
   authHttpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ export class ApiService {
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': "Bearer <insert jwt token>"
+      'Authorization': 'Bearer <insert jwt token>'
     }),
   }
 
@@ -37,11 +37,10 @@ export class ApiService {
           this.httpOptions = {
             headers: new HttpHeaders({
               'Content-Type': 'application/json',
-              'Authorization': "Bearer " + resp['token']
+              'Authorization': 'Bearer ' + resp['token']
             })
           };
          // console.log('changed authorization headers', resp);
-          //console.log(this.httpOptions);
           return resp;
         }
         ),
@@ -50,31 +49,23 @@ export class ApiService {
 
   // Game API
   get(path: string): Observable<ApiResponse>{
-    return this.http.get<ApiResponse>(this.GAME_API_URL + '/'+path, this.httpOptions);
+    return this.http.get<ApiResponse>(this.GAME_API_URL + '/' + path, this.httpOptions);
   }
   
   restoreSession(){
-    if(localStorage.getItem('token')){
+    if (localStorage.getItem('token')) {
       this.httpOptions = {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
-          'Authorization': "Bearer " + localStorage.getItem('token')
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
         })
       };
     }
   }
 
 
-  getGameState(){
-    //this.debug();
+  getGameState() {
     return this.http.get<GameState>(this.GAME_API_URL + '/state', this.httpOptions);
-  }
-
-  unlock() {
-  }
-  debug(){
-    console.log(localStorage.getItem('token'));
-    console.log(this.httpOptions.headers)
   }
 
 }
