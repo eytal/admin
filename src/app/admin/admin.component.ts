@@ -32,6 +32,8 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.message = this.messenger.dequeue();
+    this.userRanking = null;
+    this.waitingUsers = null;
     this.api.restoreSession();
     this.restoreGameState({});
     this.ws.disconnectFlag = false;
@@ -176,6 +178,8 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (gs.progress == 'EMPTY') {
       this.questionStatus = 'Game room is not open';
       this.ctl.canOpen = true;
+      this.userRanking = [];
+      this.waitingUsers = [];
       this.ctl.reset();
 
     } else if (gs.progress == 'WAITING') {
@@ -202,7 +206,7 @@ export class AdminComponent implements OnInit, OnDestroy {
         this.ctl.canNext = true;
       } else if (gs.questionState == 'START') {
         this.questionStatus = 'Question has started';
-        this.ctl.canNext = false;
+        this.ctl.canNext = true;
       }
     } else if (gs.progress == 'END') {
       this.questionStatus = 'You have ended the game';
