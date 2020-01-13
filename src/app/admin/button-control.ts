@@ -9,16 +9,21 @@ export class ButtonControl {
     public canShowEnd: boolean;
     public canReset: boolean;
     public canUnlock: boolean;
+    public canShowRanking: boolean;
+    public canShowWaiting: boolean;
 
     constructor(){
-        this.canOpen = true;
-        this.canStart = false;
-        this.canNext = false;
-        this.canShowNext = false;
-        this.canEnd = false;
-        this.canShowEnd = false;
-        this.canReset = false;
-        this.canUnlock = false;
+        this.reset();
+        // this.canOpen = true;
+        // this.canStart = false;
+        // this.canNext = false;
+        // this.canShowNext = false;
+        // this.canEnd = false;
+        // this.canShowEnd = false;
+        // this.canReset = false;
+        // this.canUnlock = false;
+        // this.canShowRanking = false;
+        // this.canShowWaiting = false;
     }
 
     toggle(param: string){
@@ -55,6 +60,8 @@ export class ButtonControl {
         this.canShowEnd = false;
         this.canReset = false;
         this.canUnlock = false;
+        this.canShowRanking = false;
+        this.canShowWaiting = false;
     }
 
 }

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiResponse } from './api-response';
 import { GameState } from '../admin/game-state';
+import { UserRank } from '../admin/user-rank';
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +51,14 @@ export class ApiService {
   // Game API
   get(path: string): Observable<ApiResponse>{
     return this.http.get<ApiResponse>(this.GAME_API_URL + '/' + path, this.httpOptions);
+  }
+
+  getRanking(){
+    return this.http.get<UserRank[]>(this.GAME_API_URL + '/rank', this.httpOptions);
+  }
+
+  getWaiting(){
+    return this.http.get<string[]>(this.GAME_API_URL + '/waiting', this.httpOptions);
   }
   
   restoreSession(){

@@ -5,6 +5,8 @@ import { WebSocketService } from '../websocket/web-socket.service';
 import { ButtonControl } from './button-control';
 import { ApiResponse } from '.././api/api-response';
 import { GameState } from './game-state';
+import { Observable } from 'rxjs';
+import { UserRank } from './user-rank';
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -18,6 +20,8 @@ export class AdminComponent implements OnInit, OnDestroy {
   public questionNo: number;
   public questionState: string;
   public questionStatus: string;
+  public userRanking: UserRank[];
+  public waitingUsers: string[];
 
   constructor(private api: ApiService, private messenger: MessageService, private ws: WebSocketService) {
     this.questionNo = 0;
@@ -81,6 +85,37 @@ export class AdminComponent implements OnInit, OnDestroy {
       }
     );
   }
+  ranking() {
+    // if (!this.ctl.canNext) {
+    //   return;
+    // }
+    // this.ctl.canNext = false;
+    this.api.getRanking().subscribe(
+      resp => {
+        this.userRanking = resp;
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  waiting() {
+    // if (!this.ctl.canNext) {
+    //   return;
+    // }
+    // this.ctl.canNext = false;
+    this.api.getWaiting().subscribe(
+      resp => {
+        this.waitingUsers = resp;
+        console.log(resp);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
 
   end() {
     if (!this.ctl.canEnd) {
@@ -90,6 +125,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.api.get('end').subscribe(
         resp => {
           this.message = resp.Success;
+          this.waitingUsers = [];
         },
         error => {
           console.log(error);
@@ -149,6 +185,8 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.ctl.canShowEnd = false;
       this.ctl.canEnd = false;
       this.questionStatus = 'Waiting to start';
+      this.ctl.canShowWaiting = false;
+      this.ctl.canShowRanking = false;
 
     } else if (gs.progress == 'PLAYING') {
       this.ctl.canStart = false;
@@ -156,6 +194,8 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.ctl.canShowNext = true;
       this.ctl.canEnd = true;
       this.ctl.canShowEnd = true;
+      this.ctl.canShowWaiting = true;
+      this.ctl.canShowRanking = true;
 
       if (gs.questionState == 'END') {
         this.questionStatus = 'Question has ended';
@@ -171,6 +211,8 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.ctl.canReset = true;
       this.ctl.canEnd = false;
       this.ctl.canShowEnd = false;
+      this.ctl.canShowWaiting = false;
+      this.ctl.canShowRanking = true;
     }
     
   }
