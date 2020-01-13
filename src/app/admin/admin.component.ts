@@ -80,6 +80,8 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.api.get('next').subscribe(
       resp => {
         this.message = '';
+        this.userRanking = null;
+        this.waitingUsers = null;
       },
       error => {
         console.log(error);
