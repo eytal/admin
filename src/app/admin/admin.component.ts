@@ -129,7 +129,8 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.api.get('end').subscribe(
         resp => {
           this.message = resp.Success;
-          this.waitingUsers = [];
+          this.waitingUsers = null;
+          this.userRanking = null;
         },
         error => {
           console.log(error);
@@ -148,6 +149,8 @@ export class AdminComponent implements OnInit, OnDestroy {
         resp => {
           this.message = resp.Success;
           this.questionStatus = 'Game has resetted';
+          this.userRanking = null;
+          this.waitingUsers = null;
         },
         error => {
           console.log(error);
