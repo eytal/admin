@@ -27,6 +27,8 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.questionNo = 0;
     this.message = '';
     this.ctl = new ButtonControl();
+    this.waitingUsers = null;
+    this.userRanking = null;
     this.ws.componentHandler(this.handleWSMessages.bind(this), this.restoreGameState.bind(this));
   }
 
@@ -183,8 +185,8 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (gs.progress == 'EMPTY') {
       this.questionStatus = 'Game room is not open';
       this.ctl.canOpen = true;
-      this.userRanking = [];
-      this.waitingUsers = [];
+      this.userRanking = null;
+      this.waitingUsers = null;
       this.ctl.reset();
 
     } else if (gs.progress == 'WAITING') {
@@ -196,6 +198,8 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.questionStatus = 'Waiting to start';
       this.ctl.canShowWaiting = false;
       this.ctl.canShowRanking = false;
+      this.userRanking = null;
+      this.waitingUsers = null;
 
     } else if (gs.progress == 'PLAYING') {
       this.ctl.canStart = false;
@@ -205,6 +209,8 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.ctl.canShowEnd = true;
       this.ctl.canShowWaiting = true;
       this.ctl.canShowRanking = true;
+      this.userRanking = null;
+      this.waitingUsers = null;
 
       if (gs.questionState == 'END') {
         this.questionStatus = 'Question has ended';
