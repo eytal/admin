@@ -9,6 +9,9 @@ export class ButtonControl {
     public canShowEnd: boolean;
     public canReset: boolean;
     public canUnlock: boolean;
+    public canGetRanking: boolean;
+    public canGetWaiting: boolean;
+    public canGetParticipants: boolean;
     public canShowRanking: boolean;
     public canShowWaiting: boolean;
     public canShowParticipants: boolean
@@ -51,6 +54,9 @@ export class ButtonControl {
         this.canShowEnd = false;
         this.canReset = false;
         this.canUnlock = false;
+        this.canGetRanking = false;
+        this.canGetParticipants = false;
+        this.canGetWaiting = false;
         this.canShowRanking = false;
         this.canShowWaiting = false;
         this.canShowParticipants = false;

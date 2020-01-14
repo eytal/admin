@@ -92,43 +92,53 @@ export class AdminComponent implements OnInit, OnDestroy {
     );
   }
   ranking() {
-    // if (!this.ctl.canNext) {
-    //   return;
-    // }
-    // this.ctl.canNext = false;
+    if (!this.ctl.canGetRanking) {
+      return;
+    }
+    this.ctl.canGetRanking = false;
     this.api.getRanking().subscribe(
       resp => {
         this.userRanking = resp;
+        this.ctl.canGetRanking = true;
       },
       error => {
         console.log(error);
+        this.ctl.canGetRanking = true;
       }
     );
   }
 
   waiting() {
-    // if (!this.ctl.canNext) {
-    //   return;
-    // }
-    // this.ctl.canNext = false;
+    if (!this.ctl.canGetWaiting) {
+      return;
+    }
+    this.ctl.canGetWaiting = false;
     this.api.getWaiting().subscribe(
       resp => {
         this.waitingUsers = resp;
         console.log(resp);
+        this.ctl.canGetWaiting = true;
       },
       error => {
         console.log(error);
+        this.ctl.canGetWaiting = true;
       }
     );
   }
   connectedUsers() {
+    if (!this.ctl.canGetParticipants) {
+      return;
+    }
+    this.ctl.canGetParticipants = false;
     this.api.getParticipants().subscribe(
       resp => {
         console.log(resp);
         this.participants = resp;
+        this.ctl.canGetParticipants = true;
     },
     error => {
       console.log(error);
+      this.ctl.canGetParticipants = true;
     });
   }
 
@@ -207,6 +217,9 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.ctl.canShowEnd = false;
       this.ctl.canEnd = false;
       this.questionStatus = 'Waiting to start';
+      this.ctl.canGetParticipants = true;
+      this.ctl.canGetRanking = true;
+      this.ctl.canGetWaiting = true;
       this.ctl.canShowWaiting = false;
       this.ctl.canShowRanking = false;
       this.ctl.canShowParticipants = true;
@@ -220,6 +233,9 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.ctl.canShowNext = true;
       this.ctl.canEnd = true;
       this.ctl.canShowEnd = true;
+      this.ctl.canGetParticipants = true;
+      this.ctl.canGetRanking = true;
+      this.ctl.canGetWaiting = true;
       this.ctl.canShowWaiting = true;
       this.ctl.canShowRanking = true;
       this.ctl.canShowParticipants = true;
@@ -241,6 +257,9 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.ctl.canReset = true;
       this.ctl.canEnd = false;
       this.ctl.canShowEnd = false;
+      this.ctl.canGetParticipants = true;
+      this.ctl.canGetRanking = true;
+      this.ctl.canGetWaiting = false;
       this.ctl.canShowWaiting = false;
       this.ctl.canShowRanking = true;
       this.ctl.canShowParticipants = true;
