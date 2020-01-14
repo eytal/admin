@@ -60,6 +60,10 @@ export class ApiService {
   getWaiting(){
     return this.http.get<string[]>(this.GAME_API_URL + '/waiting', this.httpOptions);
   }
+
+  getParticipants(){
+    return this.http.get<string[]>(this.GAME_API_URL + '/participants', this.httpOptions);
+  }
   
   restoreSession(){
     if (localStorage.getItem('token')) {

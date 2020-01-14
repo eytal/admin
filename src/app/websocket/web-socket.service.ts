@@ -30,8 +30,17 @@ export class WebSocketService {
   connect() {
     console.log('Initialize WebSocket Connection');
     // let ws = new SockJS(this.WSOCK_API);
-    // console.log(this.restoreFn);
-    this.stompClient = new Stomp.Client({});
+    let stompConfig = {
+      reconnectDelay: 2000,
+      onStompError: this.onError.bind(this),
+      onWebSocketClose: this.onError.bind(this),
+      onWebSocketError: this.onError.bind(this),
+      connectHeaders: {
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      }
+    };
+
+    this.stompClient = new Stomp.Client(stompConfig);
 
     this.stompClient.webSocketFactory = () => {
       const socket: WebSocket = new SockJS(this.WSOCK_API);
@@ -39,11 +48,14 @@ export class WebSocketService {
       return socket;
     };
 
-    // COnfiguration
-    this.stompClient.reconnectDelay = 2000;
-    this.stompClient.onStompError = this.onError.bind(this);
-    this.stompClient.onWebSocketClose = this.onError.bind(this);
-    this.stompClient.onWebSocketError = this.onError.bind(this);
+    // Configuration
+    // this.stompClient.reconnectDelay = 2000;
+    // this.stompClient.onStompError = this.onError.bind(this);
+    // this.stompClient.onWebSocketClose = this.onError.bind(this);
+    // this.stompClient.onWebSocketError = this.onError.bind(this);
+    // this.stompClient.connectHeaders = {
+    //   Authorization: "Bearer " + localStorage.getItem('token')
+    // };
 
     this.stompClient.onConnect = (frame: any) => {
       // Restore game state if there was a disconnection from the websocket

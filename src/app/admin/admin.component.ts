@@ -5,7 +5,6 @@ import { WebSocketService } from '../websocket/web-socket.service';
 import { ButtonControl } from './button-control';
 import { ApiResponse } from '.././api/api-response';
 import { GameState } from './game-state';
-import { Observable } from 'rxjs';
 import { UserRank } from './user-rank';
 @Component({
   selector: 'app-admin',
@@ -22,6 +21,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   public questionStatus: string;
   public userRanking: UserRank[];
   public waitingUsers: string[];
+  public participants: string[];
 
   constructor(private api: ApiService, private messenger: MessageService, private ws: WebSocketService) {
     this.questionNo = 0;
@@ -121,6 +121,16 @@ export class AdminComponent implements OnInit, OnDestroy {
       }
     );
   }
+  connectedUsers() {
+    this.api.getParticipants().subscribe(
+      resp => {
+        console.log(resp);
+        this.participants = resp;
+    },
+    error => {
+      console.log(error);
+    });
+  }
 
 
   end() {
@@ -187,6 +197,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.ctl.canOpen = true;
       this.userRanking = null;
       this.waitingUsers = null;
+      this.participants = null;
       this.ctl.reset();
 
     } else if (gs.progress == 'WAITING') {
@@ -198,8 +209,10 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.questionStatus = 'Waiting to start';
       this.ctl.canShowWaiting = false;
       this.ctl.canShowRanking = false;
+      this.ctl.canShowParticipants = true;
       this.userRanking = null;
       this.waitingUsers = null;
+      this.participants = null;
 
     } else if (gs.progress == 'PLAYING') {
       this.ctl.canStart = false;
@@ -209,8 +222,10 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.ctl.canShowEnd = true;
       this.ctl.canShowWaiting = true;
       this.ctl.canShowRanking = true;
+      this.ctl.canShowParticipants = true;
       this.userRanking = null;
       this.waitingUsers = null;
+      this.participants = null;
 
       if (gs.questionState == 'END') {
         this.questionStatus = 'Question has ended';
@@ -228,6 +243,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.ctl.canShowEnd = false;
       this.ctl.canShowWaiting = false;
       this.ctl.canShowRanking = true;
+      this.ctl.canShowParticipants = true;
     }
     
   }

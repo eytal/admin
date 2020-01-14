@@ -51,6 +51,18 @@
                 </td>
             </tr>
         </table>
+        <button class="btn btn-light btn-block btn-lg" type="button" (click)="connectedUsers()" [hidden]="!ctl.canShowParticipants">Get
+            Participants <span>&#9660;</span> </button>
+        <table style="width:100%" class="mb-1" *ngIf="participants && ctl.canShowParticipants">
+            <tr>
+                <th>{{participants.length?'Connected Users':'No participants are connected'}}</th>
+            </tr>
+            <tr *ngFor="let part of participants; let i = index">
+                <td>
+                    {{part}}
+                </td>
+            </tr>
+        </table>
         
     </div>
 </div>
