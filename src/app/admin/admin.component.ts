@@ -86,17 +86,21 @@ export class AdminComponent implements OnInit, OnDestroy {
       return;
     }
     this.ctl.canNext = false;
-    this.api.get('next').subscribe(
-      resp => {
-        this.message = '';
-        this.userRanking = null;
-        this.waitingUsers = null;
-      },
-      error => {
-        console.log(error);
-        this.ctl.canNext = true;
-      }
-    );
+    if (confirm('Are you sure you want to go NEXT?')) {
+      this.api.get('next').subscribe(
+        resp => {
+          this.message = '';
+          this.userRanking = null;
+          this.waitingUsers = null;
+        },
+        error => {
+          console.log(error);
+          this.ctl.canNext = true;
+        }
+      );
+    }else{
+      this.ctl.canNext = true;
+    }
   }
   ranking() {
     if (!this.ctl.canGetRanking) {

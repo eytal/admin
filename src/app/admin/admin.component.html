@@ -56,9 +56,13 @@
             Participants <span>&#9660;</span> </button>
         <table style="width:100%" class="mb-1" *ngIf="participants && ctl.canShowParticipants">
             <tr>
+                <th>{{participants.length?'Count':''}}</th>
                 <th>{{participants.length?'Connected Users':'No participants are connected'}}</th>
             </tr>
             <tr *ngFor="let part of participants; let i = index">
+                <td>
+                    {{i + 1}}
+                </td>
                 <td>
                     {{part}}
                 </td>
