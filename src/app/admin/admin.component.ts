@@ -6,6 +6,7 @@ import { ButtonControl } from './button-control';
 import { ApiResponse } from '.././api/api-response';
 import { GameState } from './game-state';
 import { UserRank } from './user-rank';
+import { CryptoService } from '../services/crypto.service';
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -23,7 +24,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   public waitingUsers: string[];
   public participants: string[];
 
-  constructor(private api: ApiService, private messenger: MessageService, private ws: WebSocketService) {
+  constructor(private api: ApiService, private messenger: MessageService, private ws: WebSocketService, private crypto: CryptoService) {
     this.questionNo = 0;
     this.message = '';
     this.ctl = new ButtonControl();
@@ -40,6 +41,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.restoreGameState({});
     this.ws.disconnectFlag = false;
     this.ws.connect();
+    console.log('url:', this.crypto.getUrl('Table 36'));
   }
 
   open() {
