@@ -25,6 +25,10 @@ export class AdminComponent implements OnInit, OnDestroy {
   public waitingUsers: string[];
   public participants: string[];
   public qrCode: string;
+  public seconds: number;
+  public minutes: number;
+  public displaySeconds: number;
+  public timerInterval: number;
 
   constructor(private api: ApiService, private messenger: MessageService, private ws: WebSocketService, private router: Router) {
     this.questionNo = 0;
@@ -33,9 +37,13 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.waitingUsers = null;
     this.userRanking = null;
     this.ws.componentHandler(this.handleWSMessages.bind(this), this.restoreGameState.bind(this));
+    this.seconds = 0;
+    this.minutes = 0;
+    this.displaySeconds = 0;
   }
 
   ngOnInit() {
+    this.timerInterval = window.setInterval(this.setTiming.bind(this), 1000);
     this.message = this.messenger.dequeue();
     this.userRanking = null;
     this.waitingUsers = null;
@@ -205,15 +213,24 @@ export class AdminComponent implements OnInit, OnDestroy {
     );
   }
 
+  setTiming(){
+    this.seconds++;
+    this.minutes = Math.floor(this.seconds / 60);
+    this.displaySeconds = this.seconds % 60;
+    console.log(this.seconds);
+  }
+
   ngOnDestroy(): void {
     this.ws.disconnect();
+    clearInterval(this.timerInterval);
   }
 
   handleWSMessages(gs: GameState) {
     this.gameState = gs;
     this.questionState = gs.questionState;
     this.questionNo = gs.question;
-    if (gs.progress == 'EMPTY') {
+
+    if (gs.progress === 'EMPTY') {
       this.questionStatus = 'Game room is not open';
       this.ctl.canOpen = true;
       this.userRanking = null;
@@ -221,7 +238,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.participants = null;
       this.ctl.reset();
 
-    } else if (gs.progress == 'WAITING') {
+    } else if (gs.progress === 'WAITING') {
       this.ctl.canOpen = false;
       this.ctl.canStart = true;
       this.ctl.canShowNext = false;
@@ -238,7 +255,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.waitingUsers = null;
       this.participants = null;
 
-    } else if (gs.progress == 'PLAYING') {
+    } else if (gs.progress === 'PLAYING') {
       this.ctl.canStart = false;
       this.ctl.canOpen = false;
       this.ctl.canShowNext = true;
@@ -254,14 +271,16 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.waitingUsers = null;
       this.participants = null;
 
-      if (gs.questionState == 'END') {
+      if (gs.questionState === 'END') {
         this.questionStatus = 'Question has ended';
         this.ctl.canNext = true;
-      } else if (gs.questionState == 'START') {
+
+      } else if (gs.questionState === 'START') {
         this.questionStatus = 'Question has started';
         this.ctl.canNext = true;
+        this.seconds = 0;
       }
-    } else if (gs.progress == 'END') {
+    } else if (gs.progress === 'END') {
       this.questionStatus = 'You have ended the game';
       this.ctl.canShowNext = false;
       this.ctl.canOpen = false;
