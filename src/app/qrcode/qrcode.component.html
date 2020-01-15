@@ -1,0 +1,17 @@
+<div class="row h-100">
+    <div class="my-auto mx-auto text-center min-w">
+        <button class="btn btn-success btn-block mb-3" type="button" (click)="returnAdmin()"> Back to Admin</button>
+        <form [formGroup]="qrForm" (ngSubmit)="generateQRcode()">
+            <div class="form-group">
+                <input class="w-100 min-w" placeholder="Table Id" name="tableid" formControlName="tableid" type="text">
+            </div>
+            <button class="btn btn-primary btn-block" type="submit" [disabled]="!qrForm.valid"> Generate QR Code </button>
+        </form>
+        <div [hidden]="!showQR">
+            <p class="h6 mt-2">
+                {{message}}
+            </p>
+            <qrcode [qrdata]="qrdata" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+        </div>
+    </div>
+</div>

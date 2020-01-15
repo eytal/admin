@@ -7,6 +7,7 @@ import { ApiResponse } from '.././api/api-response';
 import { GameState } from './game-state';
 import { UserRank } from './user-rank';
 import { CryptoService } from '../services/crypto.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -23,8 +24,9 @@ export class AdminComponent implements OnInit, OnDestroy {
   public userRanking: UserRank[];
   public waitingUsers: string[];
   public participants: string[];
+  public qrCode: string;
 
-  constructor(private api: ApiService, private messenger: MessageService, private ws: WebSocketService, private crypto: CryptoService) {
+  constructor(private api: ApiService, private messenger: MessageService, private ws: WebSocketService, private router: Router) {
     this.questionNo = 0;
     this.message = '';
     this.ctl = new ButtonControl();
@@ -41,7 +43,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.restoreGameState({});
     this.ws.disconnectFlag = false;
     this.ws.connect();
-    console.log('url:', this.crypto.getUrl('Table 36'));
+    //console.log('url:', this.crypto.getUrl('Table 36'));
   }
 
   open() {
@@ -58,6 +60,9 @@ export class AdminComponent implements OnInit, OnDestroy {
         this.ctl.canOpen = true;
       }
     );
+  }
+  goQR() {    
+    window.location.href = '/qrcode';
   }
 
   start() {
