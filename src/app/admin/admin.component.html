@@ -25,7 +25,6 @@
         <button class="btn btn-info btn-block btn-lg" type="button" (click)="goQR()" [hidden]="ctl.canOpen"> QR Code </button>
         <button class="btn btn-success btn-block btn-lg" type="button" (click)="start()" [hidden]="!ctl.canStart"> Start Game </button>
         <button class="btn btn-primary btn-block btn-lg" type="button" (click)="next()" [disabled]="!ctl.canNext" [hidden]="!ctl.canShowNext"> Next </button>
-        <button class="btn btn-danger btn-block btn-lg" type="button" (click)="end()" [disabled]="!ctl.canEnd" [hidden]="!ctl.canShowEnd"> End Game </button>
         <button class="btn btn-warning btn-block btn-lg" type="button" (click)="reset()" [hidden]="!ctl.canReset"> Reset Game</button>
         <button class="btn btn-dark btn-block btn-lg" type="button" (click)="waiting()" [hidden]="!ctl.canShowWaiting" [disabled]="!ctl.canGetWaiting">Get Unanswered <span>&#9660;</span> </button>
         <table style="width:100%" class="mb-1" *ngIf="waitingUsers && ctl.canShowWaiting">
@@ -73,6 +72,8 @@
                 </td>
             </tr>
         </table>
+        <button class="btn btn-danger btn-block btn-lg" type="button" (click)="end()" [disabled]="!ctl.canEnd" [hidden]="!ctl.canShowEnd"> End Game </button>
+
         
     </div>
 </div>

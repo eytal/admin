@@ -37,7 +37,7 @@ export class QrcodeComponent implements OnInit, OnDestroy {
     if(this.qrForm.invalid){
       return;
     }
-    let path = this.qrForm.get('tableid').value;
+    let path = 'Table ' + this.qrForm.get('tableid').value;
     this.qrdata = this.crypto.getUrl(path);
     this.message = 'Generated ' + path;
     this.showQR = true;
