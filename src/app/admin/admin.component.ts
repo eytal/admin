@@ -217,7 +217,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.seconds++;
     this.minutes = Math.floor(this.seconds / 60);
     this.displaySeconds = this.seconds % 60;
-    console.log(this.seconds);
+    //console.log(this.seconds);
   }
 
   ngOnDestroy(): void {

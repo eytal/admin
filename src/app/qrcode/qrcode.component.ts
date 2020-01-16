@@ -28,7 +28,7 @@ export class QrcodeComponent implements OnInit, OnDestroy {
   createQRForm() {
     this.qrForm = this.fb.group(
       {
-        tableid: [null, [Validators.required, Validators.minLength(2)]],
+        tableid: [null, [Validators.required, Validators.minLength(1), Validators.pattern('^\\d*$')],],
       }
     );
   }
